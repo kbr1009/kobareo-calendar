@@ -13,6 +13,7 @@ module "registry" {
 }
 
 module "app" {
+  count                 = var.deploy_workloads ? 1 : 0
   source                = "../../modules/cloud-run-service"
   project_id            = var.project_id
   region                = var.region
@@ -36,6 +37,7 @@ module "app" {
 }
 
 module "migration" {
+  count           = var.deploy_workloads ? 1 : 0
   source          = "../../modules/cloud-run-job"
   project_id      = var.project_id
   region          = var.region
