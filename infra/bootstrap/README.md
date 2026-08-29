@@ -18,7 +18,7 @@ state bucketはversioningに加えて7日間のSoft Deleteを明示し、誤削�
 
 `terraform-plan`はクラウドリソースに対してread-onlyだが、GCS backendのlockingに必要な`roles/storage.objectAdmin`をstate bucketで持つ。このためstateの改変・削除が技術的に可能であり、完全なread-onlyではない。
 
-`terraform-plan`は保存plan bucketに対して`storage.objects.create`と`storage.objects.get`だけを持つ。`storage.objects.get`は`gcloud storage cp`がアップロード後に保存対象を検証するために必要である。この権限によりplan SAはオブジェクト名が分かる場合に同バケット内の保存planを読み取れるが、一覧、更新、削除の権限は持たない。保存先はPublic Access Preventionを有効にした専用bucketに限定し、lifecycleで24時間後に削除する。
+`terraform-plan`は保存plan bucketに対して`storage.objects.create`、`storage.objects.get`、`storage.objects.list`だけを持つ。`get`と`list`は`gcloud storage cp`がアップロード先を検証するために必要である。この権限によりplan SAは同バケット内のオブジェクト名を一覧し、保存planを読み取れるが、更新、削除の権限は持たない。保存先はPublic Access Preventionを有効にした専用bucketに限定し、lifecycleで24時間後に削除する。
 
 `kobareoTerraformApply`の`run.services.setIamPolicy`は、プロジェクト内のCloud Runサービスに作用し得る強い権限である。Project IAMの`resourcemanager.projects.setIamPolicy`は含まれず、自身のIAM、WIF、カスタムロール、APIを変更できない。
 
