@@ -11,6 +11,11 @@ on:
         description: Type DEPLOY-kobareo-calendar
         required: true
         type: string
+      bootstrap_images_only:
+        description: Push initial images without updating or executing Cloud Run workloads
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -68,15 +73,28 @@ jobs:
           push: true
           tags: asia-northeast1-docker.pkg.dev/kobareo-calendar/kobareo-calendar/migration:${{ inputs.commit_sha }}
       - name: Update and execute migration job
+        if: ${{ !inputs.bootstrap_images_only }}
         env:
           MIGRATION_DIGEST: ${{ steps.migration.outputs.digest }}
         run: |
           gcloud run jobs update kobareo-migration --project="$PROJECT_ID" --region="$REGION" --image="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/migration@${MIGRATION_DIGEST}"
           gcloud run jobs execute kobareo-migration --project="$PROJECT_ID" --region="$REGION" --wait
       - name: Deploy monolith application only after migration succeeds
+        if: ${{ !inputs.bootstrap_images_only }}
         env:
           APP_DIGEST: ${{ steps.app.outputs.digest }}
         run: |
           gcloud run services update kobareo-calendar --project="$PROJECT_ID" --region="$REGION" --image="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/app@${APP_DIGEST}"
       - name: Verify public health endpoint
+        if: ${{ !inputs.bootstrap_images_only }}
         run: curl --fail --silent --show-error --retry 6 --retry-delay 10 https://calendar.kobareo.com/api/health
+      - name: Record immutable image digests
+        env:
+          APP_DIGEST: ${{ steps.app.outputs.digest }}
+          MIGRATION_DIGEST: ${{ steps.migration.outputs.digest }}
+        run: |
+          {
+            echo "### Immutable production images"
+            echo "- app: ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/app@${APP_DIGEST}"
+            echo "- migration: ${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/migration@${MIGRATION_DIGEST}"
+          } >> "$GITHUB_STEP_SUMMARY"
