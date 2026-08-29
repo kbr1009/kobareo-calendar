@@ -1,0 +1,32 @@
+name: kobareo-calendar
+
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      target: final
+    environment:
+      PORT: "8080"
+      ASPNETCORE_URLS: http://+:8080
+      COOKIE_SECURE: "false"
+      DATABASE_PROVIDER: Sqlite
+      ConnectionStrings__Default: Data Source=/data/kobareo-calendar.db
+      DATA_PROTECTION_PATH: /data/keys
+      RUN_MIGRATIONS_ON_STARTUP: "true"
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@example.com}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-ChangeMe123!}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    volumes:
+      - kobareo-calendar-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/api/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  kobareo-calendar-data:

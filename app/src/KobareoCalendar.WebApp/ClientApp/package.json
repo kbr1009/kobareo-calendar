@@ -1,0 +1,29 @@
+{
+  "name": "kobareo-calendar",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@fluentui/react-components": "^9.74.6",
+    "@fluentui/react-icons": "^2.0.337",
+    "@vitejs/plugin-react": "latest",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "typescript": "latest",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@testing-library/react": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "jsdom": "latest",
+    "tailwindcss": "4.3.3",
+    "vitest": "latest"
+  }
+}

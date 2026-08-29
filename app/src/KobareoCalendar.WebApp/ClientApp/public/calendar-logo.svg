@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
+  <title id="title">kobareo-calendar</title>
+  <rect width="48" height="48" rx="10" fill="#ffffff" />
+  <path d="M13 10v7M35 10v7" fill="none" stroke="#041e5d" stroke-width="4" stroke-linecap="round" />
+  <rect x="8" y="13" width="32" height="28" rx="5" fill="#041e5d" />
+  <path d="M8 21h32v15a5 5 0 0 1-5 5H13a5 5 0 0 1-5-5Z" fill="#ffffff" />
+  <path d="M15 27h6v5h-6Zm12 0h6v5h-6Zm-12 8h6v3h-6Zm12 0h6v3h-6Z" fill="#041e5d" />
+</svg>

@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/KobareoCalendar.Application/KobareoCalendar.Application.csproj" />
+    <Project Path="src/KobareoCalendar.Domain/KobareoCalendar.Domain.csproj" />
+    <Project Path="src/KobareoCalendar.Infrastructure/KobareoCalendar.Infrastructure.csproj" />
+    <Project Path="src/KobareoCalendar.Migration/KobareoCalendar.Migration.csproj" />
+    <Project Path="src/KobareoCalendar.SqlServerMigrations/KobareoCalendar.SqlServerMigrations.csproj" />
+    <Project Path="src/KobareoCalendar.WebApp/KobareoCalendar.WebApp.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/KobareoCalendar.Domain.Tests/KobareoCalendar.Domain.Tests.csproj" />
+    <Project Path="tests/KobareoCalendar.WebApp.Tests/KobareoCalendar.WebApp.Tests.csproj" />
+  </Folder>
+</Solution>

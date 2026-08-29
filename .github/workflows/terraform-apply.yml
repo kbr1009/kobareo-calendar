@@ -1,0 +1,76 @@
+name: Terraform production apply
+
+on:
+  workflow_dispatch:
+    inputs:
+      plan_run_id:
+        description: Approved terraform-plan workflow run ID
+        required: true
+        type: string
+      commit_sha:
+        description: Approved exact main commit SHA
+        required: true
+        type: string
+      confirmation:
+        description: Type APPLY-kobareo-calendar
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: kobareo-calendar-production-terraform
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify manual approval inputs and immutable identity
+        env:
+          CONFIRMATION: ${{ inputs.confirmation }}
+          ACTOR_ID: ${{ github.actor_id }}
+          EXPECTED_ACTOR_ID: ${{ vars.GH_ACTOR_ID }}
+          OWNER_ID: ${{ github.repository_owner_id }}
+          EXPECTED_OWNER_ID: ${{ vars.GH_OWNER_ID }}
+          REPOSITORY_ID: ${{ github.repository_id }}
+          EXPECTED_REPOSITORY_ID: ${{ vars.GH_REPOSITORY_ID }}
+        run: test "$CONFIRMATION" = "APPLY-kobareo-calendar" && test "$ACTOR_ID" = "$EXPECTED_ACTOR_ID" && test "$OWNER_ID" = "$EXPECTED_OWNER_ID" && test "$REPOSITORY_ID" = "$EXPECTED_REPOSITORY_ID"
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.commit_sha }}
+          fetch-depth: 0
+      - run: test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: 1.10.5
+          terraform_wrapper: false
+      - uses: google-github-actions/auth@ba79af03959ebeac9769e648f473a284504d9193 # v2.1.10
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_APPLY_PROVIDER }}
+          service_account: terraform-apply@kobareo-calendar.iam.gserviceaccount.com
+      - uses: google-github-actions/setup-gcloud@6189d56e4096ee891640bb02ac264be376592d6a # v2.1.2
+      - name: Download and verify the approved saved plan
+        working-directory: infra/environments/production
+        env:
+          EXPECTED_COMMIT: ${{ inputs.commit_sha }}
+          PLAN_RUN_ID: ${{ inputs.plan_run_id }}
+        run: |
+          set -euo pipefail
+          gcloud storage cp "gs://${{ vars.GCP_TFPLAN_BUCKET }}/plans/${PLAN_RUN_ID}/production.tfplan" .
+          gcloud storage cp "gs://${{ vars.GCP_TFPLAN_BUCKET }}/plans/${PLAN_RUN_ID}/production.tfplan.sha256" .
+          gcloud storage cp "gs://${{ vars.GCP_TFPLAN_BUCKET }}/plans/${PLAN_RUN_ID}/metadata.json" .
+          test "$(sha256sum production.tfplan | cut -d' ' -f1)" = "$(cat production.tfplan.sha256)"
+          test "$(jq -r .plan_sha256 metadata.json)" = "$(cat production.tfplan.sha256)"
+          test "$(jq -r .commit_sha metadata.json)" = "$EXPECTED_COMMIT"
+          test "$(jq -r .workflow_run_id metadata.json)" = "$PLAN_RUN_ID"
+          test "$(jq -r .terraform_version metadata.json)" = "$(terraform version -json | jq -r .terraform_version)"
+          test "$(jq -r .lockfile_sha256 metadata.json)" = "$(sha256sum .terraform.lock.hcl | cut -d' ' -f1)"
+      - name: Apply the exact saved plan
+        working-directory: infra/environments/production
+        run: |
+          terraform init -lockfile=readonly
+          terraform apply -lock-timeout=5m production.tfplan

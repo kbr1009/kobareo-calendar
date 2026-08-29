@@ -1,0 +1,6 @@
+@KobareoCalendar.WebApp_HostAddress = http://localhost:0
+
+GET {{KobareoCalendar.WebApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

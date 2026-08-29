@@ -1,0 +1,70 @@
+name: Terraform production plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: Exact commit SHA on main to plan
+        required: true
+        type: string
+      app_image:
+        description: Initial/current immutable monolith application image digest
+        required: true
+        type: string
+      migration_image:
+        description: Initial/current immutable migration image digest
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: kobareo-calendar-production-terraform
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify immutable GitHub identity
+        env:
+          ACTOR_ID: ${{ github.actor_id }}
+          EXPECTED_ACTOR_ID: ${{ vars.GH_ACTOR_ID }}
+          OWNER_ID: ${{ github.repository_owner_id }}
+          EXPECTED_OWNER_ID: ${{ vars.GH_OWNER_ID }}
+          REPOSITORY_ID: ${{ github.repository_id }}
+          EXPECTED_REPOSITORY_ID: ${{ vars.GH_REPOSITORY_ID }}
+        run: test "$ACTOR_ID" = "$EXPECTED_ACTOR_ID" && test "$OWNER_ID" = "$EXPECTED_OWNER_ID" && test "$REPOSITORY_ID" = "$EXPECTED_REPOSITORY_ID"
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.commit_sha }}
+          fetch-depth: 0
+      - name: Require planned commit to equal main HEAD
+        run: test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: 1.10.5
+          terraform_wrapper: false
+      - uses: google-github-actions/auth@ba79af03959ebeac9769e648f473a284504d9193 # v2.1.10
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PLAN_PROVIDER }}
+          service_account: terraform-plan@kobareo-calendar.iam.gserviceaccount.com
+      - uses: google-github-actions/setup-gcloud@6189d56e4096ee891640bb02ac264be376592d6a # v2.1.2
+      - name: Create saved plan
+        working-directory: infra/environments/production
+        env:
+          TF_VAR_app_image: ${{ inputs.app_image }}
+          TF_VAR_migration_image: ${{ inputs.migration_image }}
+        run: |
+          set -euo pipefail
+          terraform init -lockfile=readonly
+          terraform plan -lock-timeout=5m -out=production.tfplan
+          terraform show -no-color production.tfplan > production-plan.txt
+          sha256sum production.tfplan | cut -d' ' -f1 > production.tfplan.sha256
+          sha256sum .terraform.lock.hcl | cut -d' ' -f1 > lockfile.sha256
+          jq -n --arg repository "$GITHUB_REPOSITORY" --arg commit_sha "$GITHUB_SHA" --arg terraform_version "$(terraform version -json | jq -r .terraform_version)" --arg plan_sha256 "$(cat production.tfplan.sha256)" --arg lockfile_sha256 "$(cat lockfile.sha256)" --arg workflow_run_id "$GITHUB_RUN_ID" '{repository:$repository,commit_sha:$commit_sha,terraform_version:$terraform_version,plan_sha256:$plan_sha256,lockfile_sha256:$lockfile_sha256,workflow_run_id:$workflow_run_id}' > metadata.json
+          gcloud storage cp production.tfplan production.tfplan.sha256 production-plan.txt metadata.json "gs://${{ vars.GCP_TFPLAN_BUCKET }}/plans/${GITHUB_RUN_ID}/"
+      - name: Private review instructions
+        run: echo "Download gs://${{ vars.GCP_TFPLAN_BUCKET }}/plans/${GITHUB_RUN_ID}/production-plan.txt with your authorized account. The plan is not printed to this public log."

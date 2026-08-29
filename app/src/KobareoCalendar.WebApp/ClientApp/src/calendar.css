@@ -1,0 +1,515 @@
+.calendarMode {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+.calendarMode > aside {
+  display: none;
+}
+.commandActions,
+.viewSwitch {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.responsiveButtonLabel {
+  white-space: nowrap;
+}
+.viewSwitch {
+  padding: 3px;
+  border: 1px solid #e1dfdd;
+  border-radius: 6px;
+  background: #f5f5f5;
+}
+.liveStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 7px;
+  border-radius: 10px;
+  background: #ffffff20;
+  color: #fff !important;
+  font-size: 10px;
+}
+.liveStatus:before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f8d22a;
+}
+.liveStatus.connected:before {
+  background: #6ccb5f;
+  box-shadow: 0 0 0 2px #6ccb5f30;
+}
+.monthCalendar {
+  height: calc(100vh - 126px);
+  min-height: 520px;
+  display: grid;
+  grid-template-rows: 34px minmax(0, 1fr);
+  border: 1px solid #d6d6d6;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+.weekdays,
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.weekdays {
+  background: #fafafa;
+  border-bottom: 1px solid #d6d6d6;
+}
+.weekdays span {
+  display: grid;
+  place-items: center;
+  border-left: 1px solid #edebe9;
+  color: #616161;
+  font-size: 12px;
+  font-weight: 600;
+}
+.weekdays span:first-child {
+  border-left: 0;
+}
+.weekdays span:first-child {
+  color: #c50f1f;
+}
+.weekdays span:last-child {
+  color: #041e5d;
+}
+.monthGrid {
+  grid-template-rows: repeat(6, minmax(0, 1fr));
+}
+.monthDay {
+  min-width: 0;
+  overflow: hidden;
+  padding: 5px;
+  border-right: 1px solid #edebe9;
+  border-bottom: 1px solid #edebe9;
+  background: #fff;
+  cursor: pointer;
+}
+.monthDay:nth-child(7n) {
+  border-right: 0;
+}
+.monthDay:nth-last-child(-n + 7) {
+  border-bottom: 0;
+}
+.monthDay:hover {
+  background: #fafcff;
+}
+.monthDay.outside {
+  background: #fafafa;
+  color: #a19f9d;
+}
+.monthDay > header {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+.monthDay > header time {
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  font-size: 12px;
+}
+.monthDay.today > header time {
+  background: #041e5d;
+  color: #fff;
+  font-weight: 700;
+}
+.monthDay > header span {
+  color: #041e5d;
+  font-size: 10px;
+  font-weight: 600;
+}
+.monthDay > header .holidayName {
+  min-width: 0;
+  overflow: hidden;
+  color: #c50f1f;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.monthDay.holiday > header time {
+  color: #c50f1f;
+}
+.monthEvents {
+  display: grid;
+  gap: 3px;
+  margin-top: 4px;
+}
+.monthEvent {
+  min-width: 0;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 5px;
+  border: 0;
+  border-left: 3px solid;
+  border-radius: 3px;
+  color: #242424;
+  text-align: left;
+  overflow: hidden;
+}
+.monthEvent time {
+  flex: 0 0 auto;
+  font-size: 9px;
+  font-weight: 600;
+}
+.monthEvent span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+}
+.monthEvent:hover {
+  filter: brightness(0.97);
+  box-shadow: 0 1px 3px #0002;
+}
+.monthEvent.readonly {
+  cursor: default;
+}
+.monthEvent.readonly:hover {
+  filter: none;
+  box-shadow: none;
+}
+.moreEvents {
+  padding-left: 5px;
+  color: #616161;
+  font-size: 10px;
+  font-weight: 600;
+}
+@media (max-width: 900px) {
+  .commandBar {
+    align-items: flex-start !important;
+    height: auto !important;
+    min-height: 64px !important;
+    padding: 7px 0 !important;
+    flex-wrap: wrap;
+  }
+  .commandActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .monthCalendar {
+    height: calc(100vh - 184px);
+    min-height: 470px;
+  }
+  .monthDay {
+    padding: 3px;
+  }
+  .monthEvent time {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .viewSwitch .fui-Button {
+    min-width: 34px;
+  }
+  .monthCalendar {
+    min-width: 720px;
+  }
+  .calendarMode .content {
+    overflow: auto;
+  }
+  .weekdays {
+    min-width: 720px;
+  }
+}
+
+@media (max-width: 600px) {
+  html,
+  body,
+  #root,
+  .fui-FluentProvider,
+  .outlookApp {
+    width: 100%;
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .outlookApp .appBar {
+    height: 48px;
+    min-height: 48px;
+    padding: 0 6px;
+    flex-wrap: nowrap;
+  }
+  .outlookApp .appLogo {
+    width: 26px;
+    height: 26px;
+    margin: 0 2px;
+  }
+  .outlookApp .account {
+    gap: 2px;
+  }
+  .outlookApp .account > span:not(.accountAvatar),
+  .outlookApp .account .fui-Button__content {
+    display: none;
+  }
+  .outlookApp .account > .accountAvatar {
+    display: inline-flex;
+  }
+  .outlookApp .shell,
+  .outlookApp .shell.sidebarClosed,
+  .outlookApp .calendarMode {
+    width: 100%;
+    height: calc(100dvh - 48px);
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+    transition: none;
+  }
+  .outlookApp .shell > aside {
+    transition: none;
+  }
+  .outlookApp .shell:not(.sidebarClosed):not(.calendarMode) > aside {
+    position: fixed;
+    z-index: 30;
+    top: 48px;
+    bottom: 0;
+    left: 0;
+    width: min(86vw, 320px);
+    display: block;
+    padding: 10px;
+    border-right: 1px solid var(--stroke);
+    background: var(--pane);
+    box-shadow: 8px 0 24px #0004;
+    opacity: 1;
+    visibility: visible;
+    overflow-x: hidden;
+    overflow-y: auto;
+    pointer-events: auto;
+  }
+  .outlookApp .content {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0 4px 4px;
+    overflow: hidden;
+  }
+  .outlookApp .commandBar {
+    flex: 0 0 auto;
+    min-height: 0 !important;
+    margin: 0 0 3px;
+    padding: 4px 0 !important;
+    gap: 3px;
+  }
+  .outlookApp .dateNavigation {
+    width: 100%;
+    max-width: none;
+    justify-content: space-between;
+    gap: 2px;
+    overflow: hidden;
+  }
+  .outlookApp .dateNavigation .fui-Button {
+    min-width: 28px;
+    padding: 0 5px;
+  }
+  .outlookApp .datePicker {
+    width: 122px;
+    min-width: 0;
+    padding: 0 3px;
+    font-size: 12px;
+  }
+  .outlookApp .dateNavigation h1 {
+    min-width: 64px;
+    margin-left: 2px;
+    overflow: hidden;
+    font-size: 12px;
+    text-overflow: ellipsis;
+  }
+  .outlookApp .commandActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .outlookApp .viewSwitch {
+    height: 40px;
+    gap: 2px;
+    padding: 2px;
+  }
+  .outlookApp .viewSwitch .fui-Button,
+  .outlookApp .commandActions > .fui-Button {
+    width: 40px;
+    min-width: 40px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    overflow: hidden;
+  }
+  .outlookApp .viewSwitch .fui-Button svg,
+  .outlookApp .commandActions > .fui-Button svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+  }
+  .outlookApp .responsiveCommandButton .responsiveButtonLabel {
+    display: none !important;
+  }
+  .outlookApp .content > .hint {
+    display: none;
+  }
+  .outlookApp .timeline {
+    flex: 1 1 0;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: 28px;
+    grid-auto-rows: max-content;
+    overflow: hidden;
+    scrollbar-gutter: auto;
+  }
+  .outlookApp .timeHead,
+  .outlookApp .row {
+    width: 100%;
+    min-width: 0;
+    min-height: 0 !important;
+    grid-template-columns: 76px minmax(0, 1fr);
+    overflow: hidden;
+  }
+  .outlookApp .timeline .row {
+    height: var(--mobile-row-height);
+    min-height: var(--mobile-row-height) !important;
+  }
+  .outlookApp .timeHead {
+    height: 28px;
+    position: static;
+  }
+  .outlookApp .nameCell {
+    position: static;
+    min-width: 0;
+    padding: 2px 4px;
+    gap: 3px;
+    font-size: 11px;
+    line-height: 1.15;
+  }
+  .outlookApp .nameCell .fui-Avatar {
+    display: none;
+  }
+  .outlookApp .nameCell small {
+    font-size: 9px;
+  }
+  .outlookApp .archivedBadge {
+    margin-top: 1px;
+    padding: 0 3px;
+    font-size: 7px;
+    line-height: 10px;
+  }
+  .outlookApp .grid {
+    min-width: 0;
+    overflow: hidden;
+    background-size: calc(100% / 12) 100%;
+  }
+  .outlookApp .grid > span {
+    padding: 6px 1px;
+    font-size: 7px;
+  }
+  .outlookApp .grid > span:nth-child(even) {
+    display: none;
+  }
+  .outlookApp .timeline .row .event {
+    top: var(--mobile-packed-top);
+    height: 28px;
+    min-height: 28px;
+    padding: 0 2px;
+    border-left-width: 2px;
+    border-radius: 1px;
+    box-shadow: none;
+  }
+  .outlookApp .timeline .event b,
+  .outlookApp .timeline .event span {
+    font-size: clamp(7px, 2.2vw, 10px);
+    line-height: 1;
+  }
+  .outlookApp .timeline .resizeHandle {
+    width: 6px;
+  }
+  .outlookApp .monthCalendar {
+    flex: 1 1 0;
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    min-height: 0;
+    grid-template-rows: 22px minmax(0, 1fr);
+    border-radius: 3px;
+  }
+  .outlookApp .calendarMode .content {
+    overflow: hidden;
+  }
+  .outlookApp .weekdays,
+  .outlookApp .monthGrid {
+    width: 100%;
+    min-width: 0;
+  }
+  .outlookApp .monthDay {
+    min-width: 0;
+    min-height: 0;
+    padding: 1px;
+  }
+  .outlookApp .monthDay > header {
+    height: 24px;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    align-content: center;
+    gap: 1px;
+    padding: 0 1px;
+  }
+  .outlookApp .monthDay > header time {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
+  .outlookApp .monthDay > header span:not(.holidayName) {
+    display: none;
+  }
+  .outlookApp .monthDay > header .holidayName {
+    display: block;
+    font-size: clamp(5px, 1.7vw, 8px);
+    line-height: 1.05;
+    white-space: normal;
+  }
+  .outlookApp .monthDay.holiday {
+    background: #fff7f7;
+  }
+  .outlookApp .monthEvents {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 25px);
+    gap: 1px;
+    margin-top: 1px;
+    overflow: hidden;
+  }
+  .outlookApp .monthEvent {
+    width: 100%;
+    flex: 0 0 16px;
+    min-width: 0;
+    max-width: none;
+    height: 16px;
+    min-height: 16px;
+    padding: 0 1px;
+    border-width: 0 0 0 2px;
+    border-radius: 1px;
+  }
+  .outlookApp .monthEvent time {
+    display: block;
+    margin-right: 1px;
+    font-size: clamp(5px, 1.5vw, 7px);
+    line-height: 1;
+  }
+  .outlookApp .monthEvent span {
+    display: block;
+    font-size: clamp(5px, 1.7vw, 8px);
+    line-height: 1;
+  }
+}

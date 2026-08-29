@@ -1,0 +1,2 @@
+app_image       = "asia-northeast1-docker.pkg.dev/kobareo-calendar/kobareo-calendar/app@sha256:REPLACE"
+migration_image = "asia-northeast1-docker.pkg.dev/kobareo-calendar/kobareo-calendar/migration@sha256:REPLACE"

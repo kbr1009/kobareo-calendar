@@ -1,0 +1,367 @@
+.adminApp {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+.admin {
+  max-width: 1440px;
+  margin: auto;
+  padding: 0 24px 32px;
+}
+.adminCommand {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid #e1dfdd;
+  background: #fff;
+  margin: 0 -24px;
+  padding: 0 24px;
+}
+.adminTabs {
+  display: flex;
+  gap: 4px;
+}
+.adminTabs .countBadge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 18px;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: #00000012;
+  font-size: 11px;
+}
+.adminTabs [aria-selected="true"] .countBadge {
+  background: #ffffff30;
+}
+.adminSearch {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.adminSearch .fui-Input {
+  width: 260px;
+}
+.adminHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 2px 14px;
+}
+.adminHeading h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+}
+.adminHeading p {
+  margin: 5px 0 0;
+  color: #616161;
+  font-size: 13px;
+}
+.userArchiveTabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.userArchiveTabs .countBadge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 18px;
+  margin-left: 5px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: #00000012;
+  font-size: 11px;
+}
+.userArchiveTabs [aria-selected="true"] .countBadge {
+  background: #ffffff30;
+}
+.passwordPolicy {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  padding: 12px 16px;
+  border: 1px solid #e1dfdd;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 2px #0000000d;
+}
+.passwordPolicy > label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #424242;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.passwordPolicy input[type="number"] {
+  width: 64px;
+  min-height: 30px;
+  padding: 4px 6px;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+  background: #fff;
+  color: #242424;
+}
+.passwordPolicy > .fui-Button {
+  margin-left: auto;
+}
+.loginAttemptPolicy .policyDescription {
+  max-width: 360px;
+  color: #616161;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.loginAttemptPolicy input[type="number"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.addForm {
+  display: grid;
+  grid-template-columns:
+    auto minmax(140px, 1fr) minmax(210px, 1.5fr)
+    110px minmax(190px, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e1dfdd;
+  padding: 14px 16px;
+  border-radius: 6px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 2px #0000000d;
+}
+.addForm.resourceAdd {
+  grid-template-columns: auto minmax(220px, 1fr) 150px auto;
+}
+.formTitle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding-right: 6px;
+}
+.addForm input,
+.addForm select,
+.card input,
+.card select {
+  width: 100%;
+  min-height: 32px;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+  padding: 5px 8px;
+  background: #fff;
+  color: #242424;
+}
+.cardHeader {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 7px;
+  color: #616161;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.userColumns {
+  grid-template-columns:
+    minmax(180px, 1.15fr) minmax(220px, 1.4fr)
+    110px 92px 82px;
+}
+.resourceColumns {
+  grid-template-columns: minmax(220px, 1fr) 150px 92px 82px;
+}
+.cards {
+  display: grid;
+  gap: 2px;
+  border: 1px solid #e1dfdd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #e1dfdd;
+}
+.card {
+  display: grid;
+  gap: 12px;
+  align-items: center;
+  background: #fff;
+  padding: 9px 14px;
+  min-height: 54px;
+  border: 0;
+  border-radius: 0;
+}
+.card:hover {
+  background: #fafcff;
+}
+.userCard {
+  grid-template-columns:
+    minmax(180px, 1.15fr) minmax(220px, 1.4fr)
+    110px 92px 82px;
+}
+.resourceCard {
+  grid-template-columns: minmax(220px, 1fr) 150px 92px 82px;
+}
+.identityCell {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+.identityCell .fui-Avatar {
+  --fui-Avatar__background: #d0e7f8;
+  --fui-Avatar__color: #041e5d;
+}
+.statusToggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.statusToggle input {
+  width: 15px;
+  min-height: 15px;
+  accent-color: #041e5d;
+}
+.statusToggle.enabled {
+  color: #107c10;
+}
+.statusToggle.disabled {
+  color: #a4262c;
+}
+.cardActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2px;
+}
+.cardActions .fui-Button:hover {
+  color: #041e5d;
+}
+.passwordDialog {
+  width: min(520px, calc(100vw - 32px));
+  max-width: 520px;
+}
+.passwordDialogContent {
+  display: grid;
+  gap: 16px;
+  padding-top: 8px;
+}
+.passwordDialogContent p {
+  margin: 0;
+  color: var(--colorNeutralForeground2);
+  line-height: 1.6;
+}
+.passwordDialogContent label {
+  display: grid;
+  gap: 7px;
+  color: var(--colorNeutralForeground1);
+  font-size: 13px;
+  font-weight: 600;
+}
+.passwordDialogContent .fui-Input {
+  width: 100%;
+}
+.passwordDialogContent small {
+  color: var(--colorNeutralForeground3);
+  line-height: 1.5;
+}
+.passwordDialogContent .alert {
+  margin: 0;
+}
+.passwordSuccess {
+  margin: 8px 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--colorPaletteGreenBorder2);
+  border-radius: 6px;
+  background: var(--colorPaletteGreenBackground1);
+  color: var(--colorPaletteGreenForeground1);
+  line-height: 1.6;
+}
+.archiveDialog {
+  width: min(520px, calc(100vw - 32px));
+  max-width: 520px;
+}
+.archiveTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.archiveDialogContent {
+  display: grid;
+  gap: 12px;
+  padding-top: 8px;
+}
+.archiveDialogContent p,
+.archiveDialogContent ul {
+  margin: 0;
+}
+.archiveDialogContent ul {
+  display: grid;
+  gap: 7px;
+  padding-left: 22px;
+  color: var(--colorNeutralForeground2);
+  line-height: 1.5;
+}
+@media (max-width: 900px) {
+  .admin {
+    padding: 0 12px 20px;
+  }
+  .adminCommand {
+    margin: 0 -12px;
+    padding: 8px 12px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .adminSearch {
+    width: 100%;
+    margin-left: 0;
+  }
+  .adminSearch .fui-Input {
+    flex: 1;
+    width: auto;
+  }
+  .adminHeading {
+    padding-top: 18px;
+  }
+  .addForm,
+  .addForm.resourceAdd {
+    grid-template-columns: 1fr;
+  }
+  .passwordPolicy {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .passwordPolicy > .fui-Button {
+    width: 100%;
+    margin-left: 0;
+  }
+  .formTitle {
+    padding: 0 0 4px;
+  }
+  .cardHeader {
+    display: none;
+  }
+  .userCard,
+  .resourceCard {
+    grid-template-columns: 1fr;
+  }
+  .identityCell {
+    grid-template-columns: 32px 1fr;
+  }
+  .card {
+    padding: 14px;
+  }
+  .cardActions {
+    justify-content: flex-start;
+  }
+  .account > span {
+    display: none;
+  }
+}

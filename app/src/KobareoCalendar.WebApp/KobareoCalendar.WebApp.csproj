@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\KobareoCalendar.Application\KobareoCalendar.Application.csproj" />
+    <ProjectReference Include="..\KobareoCalendar.Domain\KobareoCalendar.Domain.csproj" />
+    <ProjectReference Include="..\KobareoCalendar.Infrastructure\KobareoCalendar.Infrastructure.csproj" />
+    <ProjectReference Include="..\KobareoCalendar.SqlServerMigrations\KobareoCalendar.SqlServerMigrations.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.4" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.11.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

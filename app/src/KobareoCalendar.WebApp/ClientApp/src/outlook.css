@@ -1,0 +1,780 @@
+:root {
+  --outlook-blue: #041e5d;
+  --outlook-blue-hover: #0b347f;
+  --canvas: #f5f5f5;
+  --surface: #fff;
+  --pane: #fafafa;
+  --surface-hover: #fafcff;
+  --stroke: #e1dfdd;
+  --text: #242424;
+  --muted: #616161;
+}
+.fui-FluentProvider {
+  min-height: 100vh;
+  background: var(--canvas);
+  color: var(--text);
+}
+.outlookApp {
+  min-height: 100vh;
+  background: var(--canvas);
+}
+.appBar {
+  height: 48px;
+  padding: 0 12px;
+  background: #041e5d;
+  color: #fff;
+  box-shadow: none;
+}
+.appBar .fui-Button {
+  color: #fff;
+}
+.appBar .fui-Button:hover {
+  background: #ffffff1f;
+  color: #fff;
+}
+.brand,
+.account {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.appLogo {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0 8px 0 2px;
+}
+.appSection {
+  padding-left: 14px;
+  border-left: 1px solid #ffffff50;
+  color: #fff;
+  font-size: 14px;
+}
+.account {
+  font-size: 13px;
+}
+.account .fui-Avatar {
+  --fui-Avatar__background: #d0e7f8;
+  --fui-Avatar__color: #041e5d;
+}
+.accountAvatar {
+  position: relative;
+  display: inline-flex;
+  color: inherit !important;
+}
+.notificationBadge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  min-width: 17px;
+  height: 17px;
+  display: grid;
+  place-items: center;
+  padding: 0 4px;
+  border: 2px solid #041e5d;
+  border-radius: 9px;
+  background: #d13438;
+  color: #fff !important;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+.shell {
+  grid-template-columns: 196px minmax(0, 1fr);
+  min-height: calc(100vh - 48px);
+  transition: grid-template-columns 0.16s ease;
+}
+.shell.sidebarClosed {
+  grid-template-columns: 0 minmax(0, 1fr);
+}
+.shell aside {
+  padding: 12px 10px;
+  background: var(--pane);
+  border-right: 1px solid var(--stroke);
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition:
+    opacity 0.12s ease,
+    visibility 0.12s ease,
+    padding 0.16s ease;
+}
+.shell.sidebarClosed > aside {
+  width: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.panelToggle.fui-Button {
+  min-width: 32px;
+  padding: 0;
+  border: 1px solid #ffffff42;
+  border-radius: 5px;
+  background: #ffffff14;
+}
+.panelToggle.fui-Button:hover {
+  background: #ffffff2b;
+}
+.paneTitle {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 6px;
+}
+.notificationPanel {
+  margin: 0 0 10px;
+  padding: 8px;
+  border: 1px solid var(--stroke);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.notificationHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+.notificationHeading button,
+.notificationMore {
+  padding: 2px 3px;
+  border: 0;
+  background: transparent;
+  color: var(--outlook-blue);
+  font-size: 10px;
+}
+.notificationItems {
+  display: grid;
+  gap: 2px;
+}
+.notificationItems > button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 6px;
+  padding: 5px 3px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.notificationItems > button:hover {
+  background: #f2f6fc;
+}
+.notificationItems > button.unread {
+  background: #eaf2ff;
+}
+.notificationItems p,
+.notificationEmpty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.35;
+}
+.notificationItems p strong {
+  color: var(--text);
+}
+.notificationItems time {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+}
+.notificationEmpty {
+  padding: 6px 2px;
+}
+.notificationMore {
+  width: 100%;
+  margin-top: 4px;
+}
+.paneTitle h2 {
+  font-size: 14px;
+  margin: 0;
+  white-space: nowrap;
+}
+.targetSearch {
+  width: 100%;
+  margin: 6px 0 4px;
+}
+.shell aside fieldset {
+  margin: 10px 0 0;
+  padding: 9px 0 0;
+  border-color: var(--stroke);
+}
+.shell aside legend {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+.shell aside fieldset label {
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 3px 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.shell aside fieldset label:hover {
+  background: #ebebeb;
+}
+.targetEmpty {
+  display: block;
+  padding: 5px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.registeredTarget {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px;
+  align-items: center;
+}
+.registeredTarget label {
+  min-width: 0;
+}
+.registeredTarget label span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.registeredTarget > button {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+}
+.registeredTarget > button:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+.targetResults {
+  display: grid;
+  gap: 3px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--stroke);
+}
+.targetResults > strong {
+  font-size: 11px;
+}
+.targetResults > p {
+  margin: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.targetResults > button {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+}
+.targetResults > button:hover {
+  background: var(--surface-hover);
+}
+.targetResults > button span {
+  overflow: hidden;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.targetResults > button small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+}
+.shell aside fieldset input {
+  accent-color: var(--outlook-blue);
+}
+.content {
+  padding: 0 16px 16px;
+  background: var(--surface);
+  min-width: 0;
+}
+.commandBar {
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--stroke);
+  margin-bottom: 10px;
+}
+.dateNavigation {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+.dateNavigation h1 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 0 12px;
+  white-space: nowrap;
+}
+.datePicker {
+  height: 32px;
+  border: 1px solid #d1d1d1;
+  border-radius: 4px;
+  padding: 0 8px;
+  background: #fff;
+  color: var(--text);
+}
+.content .hint {
+  margin: 0 0 8px;
+  color: var(--muted);
+}
+.timeline {
+  height: calc(100vh - 142px);
+  border: 0;
+  border-top: 1px solid var(--stroke);
+  border-radius: 0;
+  background: #fff;
+}
+.timeHead,
+.row {
+  grid-template-columns: 142px var(--width);
+  min-width: calc(142px + var(--width));
+}
+.timeHead {
+  height: 40px;
+  background: #fafafa;
+  box-shadow: 0 1px 0 var(--stroke);
+}
+.row {
+  border-top: 1px solid #edebe9;
+  background: #fff;
+}
+.row:hover {
+  background: var(--surface-hover);
+}
+.nameCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border-right: 1px solid var(--stroke);
+  background: inherit;
+  font-size: 13px;
+}
+.timeHead .nameCell {
+  display: block;
+  padding: 11px 10px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.nameCell > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.nameCell small {
+  font-size: 10px;
+  line-height: 1.2;
+}
+.grid {
+  background-color: #fff;
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent 55px,
+    #edebe9 56px
+  );
+}
+.grid > span {
+  padding: 10px 6px;
+  font-size: 11px;
+  color: #616161;
+}
+.grid > i {
+  border-color: #d6d6d6;
+}
+.event {
+  top: var(--event-top);
+  height: 37px;
+  border-width: 0 0 0 4px;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px #00000018;
+  padding: 3px 10px;
+  cursor: default;
+  transition:
+    box-shadow 0.1s,
+    filter 0.1s,
+    transform 0.1s;
+  touch-action: none;
+}
+.event.editable {
+  cursor: grab;
+}
+.event.editable:active {
+  cursor: grabbing;
+  box-shadow: 0 4px 12px #0003;
+  z-index: 8;
+}
+.event.readonly {
+  cursor: default;
+}
+.event:hover {
+  filter: saturate(1.08);
+  box-shadow: 0 2px 6px #00000025;
+}
+.event.notificationHighlight {
+  z-index: 9;
+  animation: notificationEventHighlight 2.2s ease-out;
+}
+@keyframes notificationEventHighlight {
+  0%,
+  18% {
+    filter: brightness(1.2) saturate(1.25);
+    box-shadow:
+      0 0 0 3px #5b8def,
+      0 0 20px 7px #5b8defb8;
+  }
+  100% {
+    filter: none;
+    box-shadow: 0 1px 2px #00000018;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .event.notificationHighlight {
+    animation: none;
+    box-shadow: 0 0 0 3px #5b8def;
+  }
+}
+.event.saving {
+  opacity: 0.68;
+}
+.event b {
+  font-size: 12px;
+  font-weight: 600;
+}
+.event span {
+  font-size: 10px;
+}
+.event.overlapping {
+  border-style: solid;
+  border-width: 0 0 0 5px;
+}
+.resizeHandle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  margin: 0 !important;
+  cursor: ew-resize;
+  z-index: 3;
+}
+.resizeHandle:after {
+  content: "";
+  position: absolute;
+  top: 9px;
+  bottom: 9px;
+  width: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0;
+}
+.event:hover .resizeHandle:after {
+  opacity: 0.55;
+}
+.startHandle {
+  left: 0;
+}
+.startHandle:after {
+  left: 2px;
+}
+.endHandle {
+  right: 0;
+}
+.endHandle:after {
+  right: 2px;
+}
+.nowLine {
+  z-index: 6;
+  background: #c50f1f;
+}
+.nowLine:before {
+  background: #c50f1f;
+}
+.modal {
+  background: #0006;
+  backdrop-filter: blur(2px);
+}
+.dialog {
+  border-radius: 8px;
+  box-shadow: 0 12px 42px #0004;
+  border: 1px solid #d1d1d1;
+}
+.dialogHead {
+  margin: -24px -24px 18px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--stroke);
+}
+.dialog input,
+.dialog textarea,
+.dialog select,
+.admin input,
+.admin select {
+  border-color: #c7c7c7;
+  border-radius: 4px;
+}
+.alert {
+  border: 1px solid #f1bbbc;
+  border-left: 4px solid #c50f1f;
+  border-radius: 4px;
+  background: #fdf3f4;
+}
+.empty,
+.loading {
+  border-radius: 4px;
+  background: #f5f5f5;
+}
+@media (max-width: 760px) {
+  .appBar {
+    padding: 8px 10px;
+  }
+  .account > span,
+  .appSection {
+    display: none;
+  }
+  .shell,
+  .shell.sidebarClosed {
+    grid-template-columns: 1fr;
+  }
+  .shell aside {
+    display: none;
+  }
+  .content {
+    padding: 0 8px 8px;
+  }
+  .commandBar {
+    height: auto;
+    min-height: 58px;
+    align-items: flex-start;
+    padding: 8px 0;
+    flex-wrap: wrap;
+  }
+  .dateNavigation {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  .dateNavigation h1 {
+    font-size: 15px;
+  }
+  .timeline {
+    height: calc(100vh - 168px);
+  }
+  .timeHead,
+  .row {
+    grid-template-columns: 112px var(--width);
+    min-width: calc(112px + var(--width));
+  }
+}
+
+input[type="checkbox"] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  display: inline-grid !important;
+  place-content: center !important;
+  flex: 0 0 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  margin: 0 8px 0 0 !important;
+  padding: 0 !important;
+  border: 1.5px solid #8a8886 !important;
+  border-radius: 50% !important;
+  background: #fff !important;
+  vertical-align: middle;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    border-color 0.12s,
+    box-shadow 0.12s;
+}
+input[type="checkbox"]:before {
+  content: "";
+  width: 8px;
+  height: 4px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) scale(0);
+  margin-top: -2px;
+  transition: transform 0.1s;
+}
+input[type="checkbox"]:checked {
+  background: #041e5d !important;
+  border-color: #041e5d !important;
+}
+input[type="checkbox"]:checked:before {
+  transform: rotate(-45deg) scale(1);
+}
+input[type="checkbox"]:hover {
+  border-color: #041e5d !important;
+  box-shadow: 0 0 0 3px #041e5d18;
+}
+input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+.conflictDialog {
+  max-width: 520px;
+}
+.deleteScheduleDialog {
+  width: min(440px, calc(100vw - 32px));
+}
+.deleteScheduleDialog p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+.deleteConfirmButton.fui-Button {
+  background: #c50f1f;
+}
+.deleteConfirmButton.fui-Button:hover {
+  background: #a20d19;
+}
+.warningTitle {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #8a3707;
+}
+.warningTitle svg {
+  color: #f7630c;
+  font-size: 24px;
+}
+.conflictDialog p {
+  margin: 4px 0 14px;
+  color: #424242;
+}
+.conflictDialog ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #e1dfdd;
+  border-radius: 6px;
+  max-height: 220px;
+  overflow: auto;
+}
+.conflictDialog li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #edebe9;
+}
+.conflictDialog li:last-child {
+  border-bottom: 0;
+}
+.conflictDialog li strong {
+  font-size: 13px;
+}
+.conflictDialog li span {
+  color: #616161;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.eventHoverCard {
+  pointer-events: none;
+  width: min(360px, calc(100vw - 24px));
+  padding: 0 !important;
+  border: 1px solid #d1d1d1 !important;
+  border-radius: 8px !important;
+  background: #fff;
+  color: #242424;
+  box-shadow: 0 8px 28px #0000002b !important;
+  overflow: hidden;
+  animation: hoverCardIn 0.12s ease-out;
+}
+.fixedHoverCard {
+  position: fixed;
+  z-index: 10000;
+}
+.eventHoverCard:before {
+  content: "";
+  display: block;
+  height: 4px;
+  background: #041e5d;
+}
+.eventHoverCard > div {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.hoverCardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 14px;
+  padding-bottom: 9px;
+  font-size: 16px;
+}
+.hoverCardTitle svg {
+  color: #041e5d;
+}
+.hoverCardTitle strong {
+  overflow-wrap: anywhere;
+}
+.hoverMeta {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: #424242;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.hoverMeta svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+  color: #616161;
+}
+.hoverDetails {
+  margin: 8px 16px;
+  padding: 10px 12px;
+  border-radius: 5px;
+  background: #f5f5f5;
+  color: #424242;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 120px;
+  overflow: auto;
+}
+.hoverHint {
+  margin-top: 9px;
+  padding-top: 9px !important;
+  padding-bottom: 12px;
+  border-top: 1px solid #edebe9;
+  color: #616161;
+  font-size: 11px;
+}
+@keyframes hoverCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
