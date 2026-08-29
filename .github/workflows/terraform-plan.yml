@@ -71,6 +71,10 @@ jobs:
           sha256sum production.tfplan | cut -d' ' -f1 > production.tfplan.sha256
           sha256sum .terraform.lock.hcl | cut -d' ' -f1 > lockfile.sha256
           jq -n --arg repository "$GITHUB_REPOSITORY" --arg commit_sha "$GITHUB_SHA" --arg terraform_version "$(terraform version -json | jq -r .terraform_version)" --arg plan_sha256 "$(cat production.tfplan.sha256)" --arg lockfile_sha256 "$(cat lockfile.sha256)" --arg workflow_run_id "$GITHUB_RUN_ID" '{repository:$repository,commit_sha:$commit_sha,terraform_version:$terraform_version,plan_sha256:$plan_sha256,lockfile_sha256:$lockfile_sha256,workflow_run_id:$workflow_run_id}' > metadata.json
-          gcloud storage cp production.tfplan production.tfplan.sha256 production-plan.txt metadata.json "gs://${{ vars.GCP_TFPLAN_BUCKET }}/plans/${GITHUB_RUN_ID}/"
+          plan_uri="gs://${{ vars.GCP_TFPLAN_BUCKET }}/plans/${GITHUB_RUN_ID}"
+          gcloud storage cp production.tfplan "${plan_uri}/production.tfplan"
+          gcloud storage cp production.tfplan.sha256 "${plan_uri}/production.tfplan.sha256"
+          gcloud storage cp production-plan.txt "${plan_uri}/production-plan.txt"
+          gcloud storage cp metadata.json "${plan_uri}/metadata.json"
       - name: Private review instructions
         run: echo "Download gs://${{ vars.GCP_TFPLAN_BUCKET }}/plans/${GITHUB_RUN_ID}/production-plan.txt with your authorized account. The plan is not printed to this public log."
