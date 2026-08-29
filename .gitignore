@@ -12,6 +12,7 @@
 *.tfplan
 *.tfvars
 !*.tfvars.example
+infra/bootstrap/02-state/backend.tf
 crash.log
 crash.*.log
 gha-creds-*.json
