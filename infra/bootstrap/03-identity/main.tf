@@ -44,6 +44,13 @@ resource "google_project_iam_custom_role" "terraform_plan" {
   permissions = local.plan_permissions
 }
 
+resource "google_project_iam_custom_role" "plan_artifact_reader" {
+  project     = var.project_id
+  role_id     = "kobareoPlanArtifactReader"
+  title       = "Kobareo Plan Artifact Reader"
+  permissions = ["storage.objects.get"]
+}
+
 resource "google_project_iam_custom_role" "terraform_apply" {
   project     = var.project_id
   role_id     = "kobareoTerraformApply"
@@ -117,6 +124,12 @@ resource "google_storage_bucket_iam_member" "apply_state" {
 resource "google_storage_bucket_iam_member" "plan_artifact_create" {
   bucket = var.plan_bucket_name
   role   = "roles/storage.objectCreator"
+  member = "serviceAccount:${google_service_account.account["terraform-plan"].email}"
+}
+
+resource "google_storage_bucket_iam_member" "plan_artifact_read" {
+  bucket = var.plan_bucket_name
+  role   = google_project_iam_custom_role.plan_artifact_reader.name
   member = "serviceAccount:${google_service_account.account["terraform-plan"].email}"
 }
 
