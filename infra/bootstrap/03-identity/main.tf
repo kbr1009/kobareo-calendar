@@ -45,10 +45,13 @@ resource "google_project_iam_custom_role" "terraform_plan" {
 }
 
 resource "google_project_iam_custom_role" "plan_artifact_reader" {
-  project     = var.project_id
-  role_id     = "kobareoPlanArtifactReader"
-  title       = "Kobareo Plan Artifact Reader"
-  permissions = ["storage.objects.get"]
+  project = var.project_id
+  role_id = "kobareoPlanArtifactReader"
+  title   = "Kobareo Plan Artifact Reader"
+  permissions = [
+    "storage.objects.get",
+    "storage.objects.list",
+  ]
 }
 
 resource "google_project_iam_custom_role" "terraform_apply" {
