@@ -10,6 +10,8 @@ Terraformでは管理しない。対象projectを確認後、必要なAPIだけ�
 
 `02-state`を最初はlocal backendで適用し、非公開state bucketと保存plan bucketを作る。作成前はGCS backend自身が存在しないため、`backend.tf.example`はTerraformに読まれない名前で保持する。作成後に`cp backend.tf.example backend.tf`を実行し、`terraform init -migrate-state`でGCSの`bootstrap/state`専用prefixへ移行する。移行成功とGCS上のstateを確認した後だけ、ローカルの`terraform.tfstate`とbackupを削除する。`backend.tf`、`terraform.tfstate`、planをGitへ追加しない。
 
+state bucketはversioningに加えて7日間のSoft Deleteを明示し、誤削除からの復旧余地を持たせる。保存plan bucketは機密情報の保持を1日に限定するためSoft Deleteを無効化する。
+
 ## Stage 3: identity
 
 `03-identity`はGCSの`bootstrap/identity` prefixを使用する。WIF、サービスアカウント、カスタムロール、IAM、Secretコンテナだけを管理する。Secret値は管理しない。
