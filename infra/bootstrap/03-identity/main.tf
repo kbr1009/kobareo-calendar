@@ -192,7 +192,7 @@ resource "google_service_account_iam_member" "wif" {
   }
   service_account_id = each.value.service_account
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/projects/${data.google_project.current.number}/locations/global/workloadIdentityPools/${each.value.pool_id}/attribute/repository_id/${var.github_repository_id}"
+  member             = "principalSet://iam.googleapis.com/projects/${data.google_project.current.number}/locations/global/workloadIdentityPools/${each.value.pool_id}/attribute.repository_id/${var.github_repository_id}"
 }
 
 resource "google_secret_manager_secret" "secret" {

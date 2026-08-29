@@ -11,3 +11,8 @@ if rg -n 'project\s*=\s*"(?!kobareo-calendar)' infra/environments/production inf
   echo "production Terraform contains an unexpected literal project" >&2
   exit 1
 fi
+
+if rg -n 'workloadIdentityPools/.+/attribute/' infra/bootstrap; then
+  echo "WIF principalSet attribute selectors must use attribute.NAME syntax" >&2
+  exit 1
+fi
