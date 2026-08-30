@@ -16,6 +16,11 @@ on:
         required: true
         default: false
         type: boolean
+      diagnostic_only:
+        description: Verify sanitized OIDC claims without Google authentication or deployment
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -51,14 +56,29 @@ jobs:
           fetch-depth: 0
       - name: Require deployment commit to equal main HEAD
         run: test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+      - name: Verify sanitized GitHub OIDC claims
+        env:
+          DIAGNOSTIC_ONLY: ${{ inputs.diagnostic_only }}
+          EXPECTED_ACTOR_ID: ${{ vars.GH_ACTOR_ID }}
+          EXPECTED_OWNER_ID: ${{ vars.GH_OWNER_ID }}
+          EXPECTED_REPOSITORY_ID: ${{ vars.GH_REPOSITORY_ID }}
+          EXPECTED_SUB: repo:kbr1009/kobareo-calendar:environment:production
+          EXPECTED_WORKFLOW_REF: kbr1009/kobareo-calendar/.github/workflows/deploy-production.yml@refs/heads/main
+          OIDC_AUDIENCE: //iam.googleapis.com/${{ vars.GCP_WIF_DEPLOY_PROVIDER }}
+        run: node scripts/verify-github-oidc-claims.mjs
       - uses: google-github-actions/auth@ba79af03959ebeac9769e648f473a284504d9193 # v2.1.10
+        if: ${{ !inputs.diagnostic_only }}
         with:
           workload_identity_provider: ${{ vars.GCP_WIF_DEPLOY_PROVIDER }}
           service_account: github-deployer@kobareo-calendar.iam.gserviceaccount.com
       - uses: google-github-actions/setup-gcloud@6189d56e4096ee891640bb02ac264be376592d6a # v2.1.2
+        if: ${{ !inputs.diagnostic_only }}
       - uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
+        if: ${{ !inputs.diagnostic_only }}
       - run: gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+        if: ${{ !inputs.diagnostic_only }}
       - id: app
+        if: ${{ !inputs.diagnostic_only }}
         uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v6.15.0
         with:
           context: app
@@ -66,6 +86,7 @@ jobs:
           push: true
           tags: asia-northeast1-docker.pkg.dev/kobareo-calendar/kobareo-calendar/app:${{ inputs.commit_sha }}
       - id: migration
+        if: ${{ !inputs.diagnostic_only }}
         uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v6.15.0
         with:
           context: app
@@ -73,22 +94,23 @@ jobs:
           push: true
           tags: asia-northeast1-docker.pkg.dev/kobareo-calendar/kobareo-calendar/migration:${{ inputs.commit_sha }}
       - name: Update and execute migration job
-        if: ${{ !inputs.bootstrap_images_only }}
+        if: ${{ !inputs.diagnostic_only && !inputs.bootstrap_images_only }}
         env:
           MIGRATION_DIGEST: ${{ steps.migration.outputs.digest }}
         run: |
           gcloud run jobs update kobareo-migration --project="$PROJECT_ID" --region="$REGION" --image="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/migration@${MIGRATION_DIGEST}"
           gcloud run jobs execute kobareo-migration --project="$PROJECT_ID" --region="$REGION" --wait
       - name: Deploy monolith application only after migration succeeds
-        if: ${{ !inputs.bootstrap_images_only }}
+        if: ${{ !inputs.diagnostic_only && !inputs.bootstrap_images_only }}
         env:
           APP_DIGEST: ${{ steps.app.outputs.digest }}
         run: |
           gcloud run services update kobareo-calendar --project="$PROJECT_ID" --region="$REGION" --image="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/app@${APP_DIGEST}"
       - name: Verify public health endpoint
-        if: ${{ !inputs.bootstrap_images_only }}
+        if: ${{ !inputs.diagnostic_only && !inputs.bootstrap_images_only }}
         run: curl --fail --silent --show-error --retry 6 --retry-delay 10 https://calendar.kobareo.com/api/health
       - name: Record immutable image digests
+        if: ${{ !inputs.diagnostic_only }}
         env:
           APP_DIGEST: ${{ steps.app.outputs.digest }}
           MIGRATION_DIGEST: ${{ steps.migration.outputs.digest }}
