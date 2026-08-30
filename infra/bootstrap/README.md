@@ -16,6 +16,8 @@ state bucketはversioningに加えて7日間のSoft Deleteを明示し、誤削�
 
 `03-identity`はGCSの`bootstrap/identity` prefixを使用する。WIF、サービスアカウント、カスタムロール、IAM、Secretコンテナだけを管理する。Secret値は管理しない。
 
+applyとdeployのWIF条件はGitHubの完全な`workflow_ref`を`@refs/heads/main`まで固定し、`sub`を`production` Environmentに固定する。Environment付きOIDCとの互換性のため独立した`ref`条件は使用せず、main branch制限は`workflow_ref`で保証する。repository ID、owner ID、actor IDの固定も維持する。
+
 `terraform-plan`はクラウドリソースに対してread-onlyだが、GCS backendのlockingに必要な`roles/storage.objectAdmin`をstate bucketで持つ。このためstateの改変・削除が技術的に可能であり、完全なread-onlyではない。
 
 `terraform-plan`は保存plan bucketに対して`storage.objects.create`、`storage.objects.get`、`storage.objects.list`だけを持つ。`get`と`list`は`gcloud storage cp`がアップロード先を検証するために必要である。この権限によりplan SAは同バケット内のオブジェクト名を一覧し、保存planを読み取れるが、更新、削除の権限は持たない。保存先はPublic Access Preventionを有効にした専用bucketに限定し、lifecycleで24時間後に削除する。

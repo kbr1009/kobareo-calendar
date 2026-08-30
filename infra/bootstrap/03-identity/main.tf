@@ -176,7 +176,7 @@ resource "google_iam_workload_identity_pool_provider" "apply" {
   workload_identity_pool_id          = google_iam_workload_identity_pool.github["apply"].workload_identity_pool_id
   workload_identity_pool_provider_id = "github-apply"
   attribute_mapping                  = local.oidc_mapping
-  attribute_condition                = "${local.base_condition} && assertion.ref == 'refs/heads/main' && assertion.sub == 'repo:${var.github_repository}:environment:production' && assertion.workflow_ref == '${var.github_repository}/.github/workflows/terraform-apply.yml@refs/heads/main'"
+  attribute_condition                = "${local.base_condition} && assertion.sub == 'repo:${var.github_repository}:environment:production' && assertion.workflow_ref == '${var.github_repository}/.github/workflows/terraform-apply.yml@refs/heads/main'"
   oidc { issuer_uri = "https://token.actions.githubusercontent.com" }
   lifecycle { prevent_destroy = true }
 }
@@ -186,7 +186,7 @@ resource "google_iam_workload_identity_pool_provider" "deploy" {
   workload_identity_pool_id          = google_iam_workload_identity_pool.github["deploy"].workload_identity_pool_id
   workload_identity_pool_provider_id = "github-deploy"
   attribute_mapping                  = local.oidc_mapping
-  attribute_condition                = "${local.base_condition} && assertion.ref == 'refs/heads/main' && assertion.sub == 'repo:${var.github_repository}:environment:production' && assertion.workflow_ref == '${var.github_repository}/.github/workflows/deploy-production.yml@refs/heads/main'"
+  attribute_condition                = "${local.base_condition} && assertion.sub == 'repo:${var.github_repository}:environment:production' && assertion.workflow_ref == '${var.github_repository}/.github/workflows/deploy-production.yml@refs/heads/main'"
   oidc { issuer_uri = "https://token.actions.githubusercontent.com" }
   lifecycle { prevent_destroy = true }
 }
