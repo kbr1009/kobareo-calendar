@@ -57,6 +57,7 @@ jobs:
       - run: terraform fmt -check -recursive infra
       - run: scripts/validate-terraform-scope.sh
       - run: scripts/validate-no-secrets.sh
+      - run: node scripts/verify-github-oidc-claims.test.mjs
       - name: Validate Terraform roots without cloud authentication
         run: |
           set -euo pipefail

@@ -10,4 +10,6 @@ CORS middlewareは有効化しない。React、`/api`、WebSocketはASP.NET Core
 
 アプリDB接続とmigration DB接続を分離する。Secret値はSecret Managerへ所有者が手動登録し、Terraform、tfvars、state、plan、GitHubへ含めない。
 
+WIF診断はOIDC tokenをrunnerのメモリ内でだけ解析する。token全体、audience、GitHubのOIDC request token、Google credential fileはログやJob Summaryへ出力しない。出力対象はactor ID、repository/owner ID、subject、workflow ref、Git ref、Environmentだけとする。通常のapply/deployでは実際のOIDC claimが期待するWIF境界と一致しない限りGoogle認証へ進まない。
+
 app max 1、min 0とし、migrationは手動production workflowだけで実行する。Artifact Registryは未タグimageを30日後に削除し直近20世代を保持する。Billing budgetと通知channelは金額を所有者が決めるまで未構築である。

@@ -7,3 +7,5 @@ Cloud Run imageの唯一の管理主体は`github-deployer`である。Terraform
 初回は循環依存を避けるため、保存planで`deploy_workloads = false`としArtifact Registryだけを構築する。次に`deploy-production`を`bootstrap_images_only = true`で所有者が手動実行し、Cloud Runを更新・実行せずに2つのimageをpushする。workflow summaryのdigestを使って`deploy_workloads = true`の保存planを作り、Cloud Run Serviceとmigration Jobを構築する。`-target`は使用しない。
 
 Required reviewersが利用できる場合もproduction Environmentを使用する。利用できない契約ではmain pushからapply/deployせず、actor IDを固定した手動workflowだけを使用する。Codexはこれらを起動しない。
+
+apply/deployのWIF診断は、`diagnostic_only = true`でworkflowを手動起動する。診断モードはproduction Environmentで発行されたGitHub OIDC tokenの非機密claimだけをJob Summaryへ出力し、Google認証、planのダウンロード、Terraform apply、image build/push、Cloud Run操作をすべてスキップする。診断Runのclaim不一致は記録するが、GCPを変更せずRunを成功終了させる。

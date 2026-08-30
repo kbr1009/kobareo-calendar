@@ -15,6 +15,11 @@ on:
         description: Type APPLY-kobareo-calendar
         required: true
         type: string
+      diagnostic_only:
+        description: Verify sanitized OIDC claims without Google authentication or Terraform apply
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -44,16 +49,30 @@ jobs:
           ref: ${{ inputs.commit_sha }}
           fetch-depth: 0
       - run: test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
+      - name: Verify sanitized GitHub OIDC claims
+        env:
+          DIAGNOSTIC_ONLY: ${{ inputs.diagnostic_only }}
+          EXPECTED_ACTOR_ID: ${{ vars.GH_ACTOR_ID }}
+          EXPECTED_OWNER_ID: ${{ vars.GH_OWNER_ID }}
+          EXPECTED_REPOSITORY_ID: ${{ vars.GH_REPOSITORY_ID }}
+          EXPECTED_SUB: repo:kbr1009/kobareo-calendar:environment:production
+          EXPECTED_WORKFLOW_REF: kbr1009/kobareo-calendar/.github/workflows/terraform-apply.yml@refs/heads/main
+          OIDC_AUDIENCE: //iam.googleapis.com/${{ vars.GCP_WIF_APPLY_PROVIDER }}
+        run: node scripts/verify-github-oidc-claims.mjs
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        if: ${{ !inputs.diagnostic_only }}
         with:
           terraform_version: 1.10.5
           terraform_wrapper: false
       - uses: google-github-actions/auth@ba79af03959ebeac9769e648f473a284504d9193 # v2.1.10
+        if: ${{ !inputs.diagnostic_only }}
         with:
           workload_identity_provider: ${{ vars.GCP_WIF_APPLY_PROVIDER }}
           service_account: terraform-apply@kobareo-calendar.iam.gserviceaccount.com
       - uses: google-github-actions/setup-gcloud@6189d56e4096ee891640bb02ac264be376592d6a # v2.1.2
+        if: ${{ !inputs.diagnostic_only }}
       - name: Download and verify the approved saved plan
+        if: ${{ !inputs.diagnostic_only }}
         working-directory: infra/environments/production
         env:
           EXPECTED_COMMIT: ${{ inputs.commit_sha }}
@@ -70,6 +89,7 @@ jobs:
           test "$(jq -r .terraform_version metadata.json)" = "$(terraform version -json | jq -r .terraform_version)"
           test "$(jq -r .lockfile_sha256 metadata.json)" = "$(sha256sum .terraform.lock.hcl | cut -d' ' -f1)"
       - name: Apply the exact saved plan
+        if: ${{ !inputs.diagnostic_only }}
         working-directory: infra/environments/production
         run: |
           terraform init -lockfile=readonly
